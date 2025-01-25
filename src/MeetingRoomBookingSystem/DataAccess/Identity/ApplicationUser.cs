@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace DataAccess.Identity
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;       
+        public string Pin { get; set; } = string.Empty;
+
+        public Guid DepartmentId { get; set; }
+
     }
 }

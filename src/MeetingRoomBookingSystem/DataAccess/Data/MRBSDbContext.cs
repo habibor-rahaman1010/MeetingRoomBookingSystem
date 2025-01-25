@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,8 @@ namespace DataAccess.Data
         }
 
         //This is my project related DbSet<T>
+
+        public DbSet<Department> Departments { get; set; }
 
     }
 }

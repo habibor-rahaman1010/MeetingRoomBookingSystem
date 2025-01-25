@@ -54,7 +54,7 @@ namespace Presentation
                     throw new InvalidOperationException("Migration assembly not found.");
                 }
 
-                //builder.WebHost.UseUrls("http://*:80");
+          
 
                 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
@@ -99,8 +99,13 @@ namespace Presentation
                 app.UseAuthorization();
 
                 app.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                app.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 app.MapRazorPages();
 
                 app.Run();
