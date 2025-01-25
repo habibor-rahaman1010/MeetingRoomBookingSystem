@@ -46,47 +46,7 @@ namespace DataAccess.Extensions
                 options.User.RequireUniqueEmail = true;
             });
             
-            
-            //add policy role configuration
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CustomAdminAccess", policy =>
-                {
-                    policy.RequireRole("Admin");
-                    policy.RequireRole("Support");
-                    policy.RequireRole("Member");
-                });
-
-                options.AddPolicy("CustomAccess", policy =>
-                {
-                    policy.RequireRole("Member");
-                    policy.RequireRole("Support");
-                });
-            });
-
-            //add Claim base authentication configuration
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ReadPermission", policy =>
-                {
-                    policy.RequireClaim("Read", "true");
-                });
-
-                options.AddPolicy("CreatePermission", policy =>
-                {
-                    policy.RequireClaim("Create", "true");
-                });
-
-                options.AddPolicy("UpdatePermission", policy =>
-                {
-                    policy.RequireClaim("Update", "true");
-                });
-
-                options.AddPolicy("DeletePermission", policy =>
-                {
-                    policy.RequireClaim("Delete", "true");
-                });
-            });
+                      
                     
         }
 
@@ -97,18 +57,9 @@ namespace DataAccess.Extensions
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
             var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
-            string[] rolesName = { "Admin", "Support", "Member" };
+            string[] rolesName = { "Admin", "User" };
             string adminEmail = "habibor.rahaman1010@gmail.com";
             string adminPassword = "c++c++c#";
-
-            // Retrieve claims from the database dynamically (or set them manually)
-            var userClaims = new List<Claim>
-            {
-                new Claim("Read", "true"),
-                new Claim("Create", "true"),
-                new Claim("Update", "true"),
-                new Claim("Delete", "true")
-            };
 
             // Ensure roles exist
             foreach (var roleName in rolesName)
@@ -137,19 +88,7 @@ namespace DataAccess.Extensions
                     foreach (var roleName in rolesName)
                     {
                         await userManager.AddToRoleAsync(adminUser, roleName);
-                    }
-
-                    // Add claims to the user
-                    foreach (var claim in userClaims)
-                    {
-                        var existingClaim = (await userManager.GetClaimsAsync(adminUser))
-                                            .FirstOrDefault(c => c.Type == claim.Type);
-
-                        if (existingClaim == null)  // Ensure not adding duplicate claims
-                        {
-                            await userManager.AddClaimAsync(adminUser, claim);
-                        }
-                    }
+                    }                   
                 }
                 else
                 {

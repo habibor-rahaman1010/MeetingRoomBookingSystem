@@ -77,6 +77,8 @@ namespace Presentation
                 //This service for automapper
                 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+                builder.Services.AddControllersWithViews();
+
                 var app = builder.Build();
 
                 // Configure the HTTP request pipeline.
@@ -96,17 +98,18 @@ namespace Presentation
 
                 app.UseRouting();
 
-                app.UseAuthorization();
+                app.UseAuthentication();
+                //app.UseAuthorization();
 
-                app.MapControllerRoute(
+                /*app.MapControllerRoute(
                     name: "areas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");*/
 
                 app.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                app.MapRazorPages();
+                //app.MapRazorPages();
 
                 app.Run();
 
