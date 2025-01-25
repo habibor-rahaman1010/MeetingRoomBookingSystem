@@ -7,6 +7,9 @@ using Serilog.Events;
 using System.Reflection;
 using DataAccess.Data;
 using DataAccess.Extensions;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using Presentation.PresentationModules;
 
 namespace Presentation
 {
@@ -63,6 +66,16 @@ namespace Presentation
 
                 //This is my extension method here have all identity related configuration...
                 builder.Services.AddIdentity();
+
+                // This is Autofac service...
+                builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+                builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+                {
+                    containerBuilder.RegisterModule(new PresentationModule(connectionString, migrationAssembly));
+                });
+
+                //This service for automapper
+                builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
                 var app = builder.Build();
 
