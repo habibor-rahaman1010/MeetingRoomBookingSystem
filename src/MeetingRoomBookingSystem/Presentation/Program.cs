@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using DataAccess.Data;
+using DataAccess.Extensions;
 
 namespace Presentation
 {
@@ -61,7 +62,7 @@ namespace Presentation
                 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
                 //This is my extension method here have all identity related configuration...
-                //builder.Services.AddIdentity();
+                builder.Services.AddIdentity();
 
                 var app = builder.Build();
 
