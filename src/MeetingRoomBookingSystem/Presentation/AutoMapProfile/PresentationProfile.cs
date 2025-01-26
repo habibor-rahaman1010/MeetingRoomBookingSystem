@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Identity;
+using Domain.Entities;
 using Presentation.Models;
 
 namespace Presentation.AutoMapProfile
@@ -9,6 +10,7 @@ namespace Presentation.AutoMapProfile
         public PresentationProfile()
         {
             CreateMap<UserUpdateModel, ApplicationUser>().ReverseMap();
+            CreateMap<MeetingRoomCreateModel, MeetingRoom>().ReverseMap();
         }
     }
 }

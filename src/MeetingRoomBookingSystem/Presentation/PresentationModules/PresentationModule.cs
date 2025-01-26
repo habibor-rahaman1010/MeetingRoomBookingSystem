@@ -49,7 +49,7 @@ namespace Presentation.PresentationModules
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<MeetingRoomManagementService>()
-                .As<IMeetingRoomRepository>()
+                .As<IMeetingRoomManagementService>()
                 .InstancePerLifetimeScope();
 
         }

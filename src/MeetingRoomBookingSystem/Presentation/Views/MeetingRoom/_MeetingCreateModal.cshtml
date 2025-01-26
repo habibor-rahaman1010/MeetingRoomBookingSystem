@@ -14,7 +14,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="createMeetingForm" asp-action="CreateMeeting" asp-controller="MeetingRoom" method="post" enctype="multipart/form-data">
+                <form id="createMeetingForm" asp-action="MeetingRoomAdd" asp-controller="MeetingRoom" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label asp-for="Name">Meeting Room Name <span class="text-danger">*</span></label>
                         <input asp-for="Name" class="form-control" placeholder="Meeting Room Name" />
@@ -49,8 +49,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="AvailableDay">Available Day <span class="text-danger">*</span></label>
-                                <input asp-for="AvailableDay" type="date" class="form-control" />
+                                <label asp-for="AvailableDay" class="control-label"></label>
+                                <select asp-for="AvailableDay" class="form-control" asp-items="Html.GetEnumSelectList<DayOfWeek>()"></select>
                                 <span asp-validation-for="AvailableDay" class="text-danger"></span>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                         <label asp-for="ImageFile" class="control-label">Product image <span class="text-danger">*</span></label>
                         <div class="custom-file">
                             <label class="custom-file-label" asp-for="ImageFile">Choose your file</label>
-                            <input style="cursor:pointer" asp-for="ImageFile" class="custom-file-input" id="productImage">
+                            <input style="cursor:pointer" asp-for="ImageFile" class="custom-file-input" id="roomImage">
                             <p id="imageError"></p>
                         </div>
                         <p class="mt-2">Max File size: 5MB <br /> Allowed File: .jpeg, .jpg, .png <br /> Aspect ratio should be 1:1</p>
