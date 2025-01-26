@@ -9,7 +9,7 @@ namespace Presentation.Models
 {
     public class RegistrationModel
     {
-
+        public Guid Id { get; set; }
         public RegistrationModel()
         {
             Departments = new List<SelectListItem>();

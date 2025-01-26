@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DataAccess.Identity;
+using Presentation.Models;
 
 namespace Presentation.AutoMapProfile
 {
@@ -6,7 +8,7 @@ namespace Presentation.AutoMapProfile
     {
         public PresentationProfile()
         {
-            
+            CreateMap<UserUpdateModel, ApplicationUser>().ReverseMap();
         }
     }
 }
