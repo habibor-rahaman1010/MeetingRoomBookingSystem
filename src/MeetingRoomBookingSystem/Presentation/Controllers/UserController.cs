@@ -10,7 +10,6 @@ using Presentation.Models;
 
 namespace Presentation.Controllers
 {
-    [Area("Admin"), Authorize(Policy = "CustomAdminAccess")]
     public class UserController : Controller
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -33,15 +32,15 @@ namespace Presentation.Controllers
         }
 
         //This method return all users with pagination and with column sorting...
-        [Route("Admin/AllUser/AllUserList"), Authorize(Policy = "CustomAdminAccess")]
+        [Route("User/AllUserList")]
         public IActionResult AllUserList()
         {
             return View();
         }
 
         //This method return all users with pagination and with column sorting...
-        [HttpPost, Authorize(Policy = "CustomAdminAccess")]
-        [Route("Admin/AllUser/GetAllUsers")]
+        [HttpPost]
+        [Route("User/GetAllUsers")]
         public async Task<IActionResult> GetAllUsers(int draw, int start, int length, string search, List<Order> order)
         {
             var query = _userManager.Users.AsQueryable();
@@ -114,6 +113,7 @@ namespace Presentation.Controllers
             var data = usersWithRoles.Select(u => new
             {
                 u.User.UserName,
+                u.User.Pin,
                 u.User.Email,
                 u.User.Id,
                 u.User.EmailConfirmed,
@@ -131,7 +131,7 @@ namespace Presentation.Controllers
 
 
         //This is delete user method...
-        [HttpPost, Authorize(Policy = "CustomAdminAccess")]
+        [HttpPost]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             try
@@ -190,7 +190,6 @@ namespace Presentation.Controllers
 
 
         //This mehtod get a user by id for update...
-        [Authorize(Policy = "CustomAdminAccess")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -219,7 +218,7 @@ namespace Presentation.Controllers
         }
 
         //This is user update mehtod also user roles update code...
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CustomAdminAccess")]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateUser(UserUpdateModel model, List<string> Roles)
         {
             if (ModelState.IsValid)

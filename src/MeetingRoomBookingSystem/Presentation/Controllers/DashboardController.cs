@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Presentation.Models;
 
 namespace Presentation.Controllers
 {
@@ -6,7 +7,8 @@ namespace Presentation.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var model = new MeetingRoomDashboardModel();
+            return View(model);
         }
     }
 }
