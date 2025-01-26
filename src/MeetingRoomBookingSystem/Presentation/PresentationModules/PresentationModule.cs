@@ -1,7 +1,11 @@
 ﻿using Autofac;
 using DataAccess.Data;
+using DataAccess.Repositories;
 using DataAccess.UnitOfWork;
+using Domain.RepositoryContracts;
 using Domain.UnitOfWorkContracts;
+using Service.Services;
+using Service.ServicesContract;
 
 namespace Presentation.PresentationModules
 {
@@ -30,6 +34,14 @@ namespace Presentation.PresentationModules
 
             builder.RegisterType<MRBSUnitOfWork>()
                 .As<IMRBSUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<DepartmentManagementService>()
+                .As<IDepartmentManagementService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<DepartmentRepository>()
+                .As<IDepartmentRepository>()
                 .InstancePerLifetimeScope();
 
         }

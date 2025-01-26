@@ -121,10 +121,11 @@ namespace Presentation.Controllers
                     return View(model);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberPassword, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 
                 if (result.IsLockedOut)
