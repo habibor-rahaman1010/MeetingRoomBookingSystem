@@ -52,8 +52,6 @@ namespace Presentation
                     throw new InvalidOperationException("Migration assembly not found.");
                 }
 
-
-
                 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
 
@@ -86,8 +84,7 @@ namespace Presentation
                 }
                 else
                 {
-                    app.UseExceptionHandler("/Home/Error");
-                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseExceptionHandler("/Home/Error");           
                     app.UseHsts();
                 }
 
@@ -99,15 +96,9 @@ namespace Presentation
                 app.UseAuthentication();
                 app.UseAuthorization();
 
-                /*app.MapControllerRoute(
-                    name: "areas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");*/
-
                 app.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
-
-                //app.MapRazorPages();
 
                 app.Run();
 

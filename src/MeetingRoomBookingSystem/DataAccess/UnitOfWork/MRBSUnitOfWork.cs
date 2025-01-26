@@ -8,13 +8,15 @@ namespace DataAccess.UnitOfWork
     {
         public IDepartmentRepository DepartmentRepository { get; private set; }
 
+        public IMeetingRoomRepository MeetingRoomRepository { get; private set; }
 
         public MRBSUnitOfWork(MRBSDbContext mrbsDbContext,
-            IDepartmentRepository departmentRepository)
+            IDepartmentRepository departmentRepository,
+            IMeetingRoomRepository meetingRoomRepository)
             : base(mrbsDbContext)
         {
             DepartmentRepository = departmentRepository;
-
+            MeetingRoomRepository = meetingRoomRepository;
         }
 
     }

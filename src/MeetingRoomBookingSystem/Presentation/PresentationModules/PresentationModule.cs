@@ -44,6 +44,14 @@ namespace Presentation.PresentationModules
                 .As<IDepartmentRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<MeetingRoomRepository>()
+                .As<IMeetingRoomRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<MeetingRoomManagementService>()
+                .As<IMeetingRoomRepository>()
+                .InstancePerLifetimeScope();
+
         }
     }
 }
