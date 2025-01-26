@@ -43,10 +43,9 @@ namespace Presentation.Controllers
         public async Task<IActionResult> RegisterAsync()
         {
             var model = new RegistrationModel();
-            model.SetCategoriesValues(await _departmentManagementService.GetDepartmentsAsync());
+            model.SetDepartmentsValues(await _departmentManagementService.GetDepartmentsAsync());
             return View(model);
         }
-
 
         [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(RegistrationModel model)
@@ -60,23 +59,13 @@ namespace Presentation.Controllers
                     UserName = model.Name,
                     Pin = model.Pin,
                     DepartmentId = model.DepartmentId
-                };
+                };     
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    await _userManager.AddToRoleAsync(user, "Member");
-
-                    // Add claim for the user Read claim add by deafult a user
-                    var claimResult = await _userManager.AddClaimAsync(user, new Claim("Read", "true"));
-                    if (!claimResult.Succeeded)
-                    {
-                        foreach (var error in claimResult.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                        return View(model); // Return if claim addition fails
-                    }
+                    await _userManager.AddToRoleAsync(user, "User");
 
                 }
                 foreach (var error in result.Errors)
@@ -85,7 +74,8 @@ namespace Presentation.Controllers
                 }
             }
 
-            return View(model);
+            //return View(model);
+            return RedirectToAction("AllUserList", "User");
         }
 
 

@@ -9,6 +9,7 @@ using Domain;
 using Presentation.Models;
 using Service.ServicesContract;
 using Domain.Entities;
+using System.Security.Claims;
 
 namespace Presentation.Controllers
 {
@@ -38,9 +39,11 @@ namespace Presentation.Controllers
 
         //This method return all users with pagination and with column sorting...
         [Route("User/AllUserList")]
-        public IActionResult AllUserList()
+        public async Task<IActionResult> AllUserList()
         {
-            return View();
+            var model = new RegistrationModel();
+            model.SetDepartmentsValues(await _departmentManagementService.GetDepartmentsAsync());
+            return View(model);
         }
 
         //This method return all users with pagination and with column sorting...
@@ -91,22 +94,40 @@ namespace Presentation.Controllers
                             : usersWithRoles.OrderByDescending(u => u.User.UserName).ToList();
                         break;
 
-                    case 1: // Email
+                    case 1: // Pin
+                        usersWithRoles = sortDirection == "asc"
+                            ? usersWithRoles.OrderBy(u => u.User.Pin).ToList()
+                            : usersWithRoles.OrderByDescending(u => u.User.Pin).ToList();
+                        break;
+
+                    case 2: // Email
                         usersWithRoles = sortDirection == "asc"
                             ? usersWithRoles.OrderBy(u => u.User.Email).ToList()
                             : usersWithRoles.OrderByDescending(u => u.User.Email).ToList();
                         break;
 
-                    case 3: // RoleNames
-                        usersWithRoles = sortDirection == "asc"
-                            ? usersWithRoles.OrderBy(u => u.RoleNames).ToList()
-                            : usersWithRoles.OrderByDescending(u => u.RoleNames).ToList();
-                        break;
-
-                    case 4: // RoleNames
+                    case 3: // phone number
                         usersWithRoles = sortDirection == "asc"
                             ? usersWithRoles.OrderBy(u => u.User.PhoneNumber).ToList()
                             : usersWithRoles.OrderByDescending(u => u.User.PhoneNumber).ToList();
+                        break;
+
+                    case 4: // department
+                        usersWithRoles = sortDirection == "asc"
+                            ? usersWithRoles.OrderBy(u => u.User.DepartmentId).ToList()
+                            : usersWithRoles.OrderByDescending(u => u.User.DepartmentId).ToList();
+                        break;
+
+                    case 5: // designation
+                        usersWithRoles = sortDirection == "asc"
+                            ? usersWithRoles.OrderBy(u => u.User.Designation).ToList()
+                            : usersWithRoles.OrderByDescending(u => u.User.Designation).ToList();
+                        break;
+
+                    case 6: // RoleNames
+                        usersWithRoles = sortDirection == "asc"
+                            ? usersWithRoles.OrderBy(u => u.RoleNames).ToList()
+                            : usersWithRoles.OrderByDescending(u => u.RoleNames).ToList();
                         break;
 
                     default:
@@ -125,10 +146,12 @@ namespace Presentation.Controllers
                 u.User.Email,
                 u.User.PhoneNumber,
                 u.User.Id,
-                RoleNames = u.RoleNames,
                 Department = departmentDictionary.ContainsKey(u.User.DepartmentId)
                  ? departmentDictionary[u.User.DepartmentId]
-                 : "Unknown"
+                 : "Unknown",
+                u.User.Designation,
+                RoleNames = u.RoleNames,
+                u.User.Status
             }).ToList();
 
             return Json(new
@@ -139,7 +162,6 @@ namespace Presentation.Controllers
                 data = data
             });
         }
-
 
         //This is delete user method...
         [HttpPost]

@@ -1,0 +1,75 @@
+﻿@model RegistrationModel;
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<!-- Modal for editing a category -->
+<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserModalLabel">Add New User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post">
+                    <h2 class="text-center text-success">Create New User</h2>
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <label>Name</label>
+                        <input asp-for="Name" class="form-control" autocomplete="Name" aria-required="true" placeholder="Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <label>Email</label>
+                        <input asp-for="Email" class="form-control" autocomplete="Email" aria-required="true" placeholder="Enter your email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <label>Pin</label>
+                        <input asp-for="Pin" class="form-control" autocomplete="Pin" aria-required="true" placeholder="Pin" />
+                        <span asp-validation-for="Pin" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <label>Phone Number</label>
+                        <input asp-for="PhoneNumber" class="form-control" autocomplete="PhoneNumber" aria-required="true" placeholder="Phone Number" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <label>Password</label>
+                        <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-floating mb-3">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control"></select>
+                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <label>Designation</label>
+                        <input asp-for="Designation" class="form-control" aria-required="true" placeholder="Designation" />
+                        <span asp-validation-for="Designation" class="text-danger"></span>
+                    </div>
+
+                    <div>
+                        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
