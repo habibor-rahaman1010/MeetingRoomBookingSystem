@@ -43,7 +43,8 @@
                             <th>Name</th>
                             <th>Pin</th>
                             <th>Email</th>
-                            <th>Email Confirmed</th>
+                            <th>Phone</th>
+                            <th>Department</th>
                             <th>Roles</th>
                             <th>Actions</th>
                         </tr>
@@ -53,7 +54,8 @@
                             <th>Name</th>
                             <th>Pin</th>
                             <th>Email</th>
-                            <th>Email Confirmed</th>
+                            <th>Phone</th>
+                            <th>Department</th>
                             <th>Roles</th>
                             <th>Actions</th>
                         </tr>
@@ -128,24 +130,23 @@
                                 Direction: order.dir          // Convert "dir" to "Direction"
                             };
                         });
+                         console.log(d);
                     }
                 },
+                
                 columns: [
                     { data: "userName", title: "Name" },
                     { data: "pin", title: "Pin" },
                     { data: "email", title: "Email" },
-                    {
-                        data: "emailConfirmed", title: "Email Confirmed", render: function (data, type, row) {
-                            return data ? 'Yes' : 'No';
-                        }
-                    },
+                    { data: "phoneNumber", title: "Phone" },
+                    { data: "department", title: "Department" },
                     { data: "roleNames", title: "Roles" },
 
                     {
                         data: "id",
                         title: "Actions",
                         orderable: false,
-                        render: function (data, type, row) {
+                        render: function (data, type, row) {                         
                             return `<button type="button" class="btn btn-info btn-sm update-user" data-id='${data}' data-toggle="modal" data-target="#updateUserModal">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </button>

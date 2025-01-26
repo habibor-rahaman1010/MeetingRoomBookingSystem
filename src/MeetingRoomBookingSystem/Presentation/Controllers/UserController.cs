@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Identity;
 using Domain;
 using Presentation.Models;
+using Service.ServicesContract;
+using Domain.Entities;
 
 namespace Presentation.Controllers
 {
@@ -16,18 +18,21 @@ namespace Presentation.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
+        private readonly IDepartmentManagementService _departmentManagementService;
         private readonly ILogger<UserController> _logger;
 
         public UserController(RoleManager<ApplicationRole> roleManager,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IMapper mapper,
+            IDepartmentManagementService departmentManagementService,
             ILogger<UserController> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _departmentManagementService = departmentManagementService;
             _logger = logger;
         }
 
@@ -66,7 +71,7 @@ namespace Presentation.Controllers
             // Fetch roles for each user
             foreach (var user in usersList)
             {
-                var roles = await _userManager.GetRolesAsync(user);
+                var roles = await _userManager.GetRolesAsync(user);              
                 var roleNames = string.Join(", ", roles);
                 usersWithRoles.Add((user, roleNames));
             }
@@ -92,16 +97,16 @@ namespace Presentation.Controllers
                             : usersWithRoles.OrderByDescending(u => u.User.Email).ToList();
                         break;
 
-                    case 2: // EmailConfirmed
-                        usersWithRoles = sortDirection == "asc"
-                            ? usersWithRoles.OrderBy(u => u.User.EmailConfirmed).ToList()
-                            : usersWithRoles.OrderByDescending(u => u.User.EmailConfirmed).ToList();
-                        break;
-
                     case 3: // RoleNames
                         usersWithRoles = sortDirection == "asc"
                             ? usersWithRoles.OrderBy(u => u.RoleNames).ToList()
                             : usersWithRoles.OrderByDescending(u => u.RoleNames).ToList();
+                        break;
+
+                    case 4: // RoleNames
+                        usersWithRoles = sortDirection == "asc"
+                            ? usersWithRoles.OrderBy(u => u.User.PhoneNumber).ToList()
+                            : usersWithRoles.OrderByDescending(u => u.User.PhoneNumber).ToList();
                         break;
 
                     default:
@@ -109,15 +114,21 @@ namespace Presentation.Controllers
                 }
             }
 
+            var departments = await _departmentManagementService.GetDepartmentsAsync();
+            var departmentDictionary = departments.ToDictionary(d => d.Id, d => d.Name);
+
             // Prepare the final data to return
             var data = usersWithRoles.Select(u => new
             {
                 u.User.UserName,
                 u.User.Pin,
                 u.User.Email,
+                u.User.PhoneNumber,
                 u.User.Id,
-                u.User.EmailConfirmed,
-                RoleNames = u.RoleNames
+                RoleNames = u.RoleNames,
+                Department = departmentDictionary.ContainsKey(u.User.DepartmentId)
+                 ? departmentDictionary[u.User.DepartmentId]
+                 : "Unknown"
             }).ToList();
 
             return Json(new
