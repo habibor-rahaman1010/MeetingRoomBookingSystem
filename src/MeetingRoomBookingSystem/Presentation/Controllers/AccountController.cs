@@ -1,21 +1,12 @@
 ﻿
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using DataAccess.Identity;
-using Service.ServicesContract;
-using System.Web;
-using Microsoft.IdentityModel.Tokens;
-using System.Linq;
-using Presentation.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Models;
+using Service.ServicesContract;
 
 namespace Presentation.Controllers
 {
@@ -59,7 +50,7 @@ namespace Presentation.Controllers
                     UserName = model.Name,
                     Pin = model.Pin,
                     DepartmentId = model.DepartmentId
-                };     
+                };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -117,7 +108,7 @@ namespace Presentation.Controllers
                     _logger.LogInformation("User logged in.");
                     return RedirectToAction("Index", "Dashboard");
                 }
-                
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");

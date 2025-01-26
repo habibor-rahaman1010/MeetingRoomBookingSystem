@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Identity
 {
@@ -16,7 +11,7 @@ namespace DataAccess.Identity
             ILogger<RoleManager<ApplicationRole>> logger)
             : base(store, roleValidators, keyNormalizer, errors, logger)
         {
-            
+
         }
     }
 }

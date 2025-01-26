@@ -1,10 +1,5 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Data
 {
@@ -36,9 +31,8 @@ namespace DataAccess.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        //This is my project related DbSet<T>
-
         public DbSet<Department> Departments { get; set; }
+        public DbSet<MeetingRoom> MeetingRooms { get; set; }
 
     }
 }

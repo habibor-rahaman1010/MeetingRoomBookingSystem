@@ -1,14 +1,7 @@
 ﻿using DataAccess.Data;
 using DataAccess.Identity;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Extensions
 {
@@ -45,9 +38,9 @@ namespace DataAccess.Extensions
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
-            
-                      
-                    
+
+
+
         }
 
         // Extension method for seeding admin roles and user
@@ -88,7 +81,7 @@ namespace DataAccess.Extensions
                     foreach (var roleName in rolesName)
                     {
                         await userManager.AddToRoleAsync(adminUser, roleName);
-                    }                   
+                    }
                 }
                 else
                 {

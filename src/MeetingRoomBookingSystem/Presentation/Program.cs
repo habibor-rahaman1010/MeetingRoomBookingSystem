@@ -1,15 +1,13 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Presentation.Data;
-using Serilog.Sinks.MSSqlServer;
-using Serilog;
-using Serilog.Events;
-using System.Reflection;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using DataAccess.Data;
 using DataAccess.Extensions;
-using Autofac.Extensions.DependencyInjection;
-using Autofac;
+using Microsoft.EntityFrameworkCore;
 using Presentation.PresentationModules;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer;
+using System.Reflection;
 
 namespace Presentation
 {
@@ -54,7 +52,7 @@ namespace Presentation
                     throw new InvalidOperationException("Migration assembly not found.");
                 }
 
-          
+
 
                 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));

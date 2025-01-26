@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
 using DataAccess.Identity;
 using Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Presentation.Models;
 using Service.ServicesContract;
-using Domain.Entities;
-using System.Security.Claims;
+using System.Data;
 
 namespace Presentation.Controllers
 {
@@ -74,7 +71,7 @@ namespace Presentation.Controllers
             // Fetch roles for each user
             foreach (var user in usersList)
             {
-                var roles = await _userManager.GetRolesAsync(user);              
+                var roles = await _userManager.GetRolesAsync(user);
                 var roleNames = string.Join(", ", roles);
                 usersWithRoles.Add((user, roleNames));
             }

@@ -3,11 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Identity
 {
@@ -22,7 +17,7 @@ namespace DataAccess.Identity
             IUserConfirmation<ApplicationUser> userConfirmation)
             : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, userConfirmation)
         {
-            
+
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.RazorUtility
 {
@@ -19,7 +14,7 @@ namespace DataAccess.RazorUtility
             Items.Insert(0, new SelectListItem("Select", string.Empty));
 
             return Items;
-        }       
+        }
 
     }
 }

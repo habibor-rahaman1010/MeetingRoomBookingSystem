@@ -4,7 +4,7 @@ using Presentation.Models;
 
 namespace Presentation.AutoMapProfile
 {
-    public class PresentationProfile : Profile 
+    public class PresentationProfile : Profile
     {
         public PresentationProfile()
         {

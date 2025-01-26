@@ -1,9 +1,7 @@
-﻿using Domain.Entities;
-using Microsoft.AspNetCore.Authentication;
+﻿using DataAccess.RazorUtility;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
-using DataAccess.RazorUtility;
 
 namespace Presentation.Models
 {
