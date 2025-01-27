@@ -157,8 +157,34 @@ namespace Presentation.Controllers
             return View(model);
         }
 
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> MeetingRoomDelete(Guid id)
+        {
+            try
+            {
+                await _meetingRoomManagementService.DeleteMeetingRoomAsync(id);
 
-        
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "The metting room has deleted successfuly",
+                    Type = ResponseTypes.Success
+                });
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "The meeting has deleted failed",
+                    Type = ResponseTypes.Danger
+                });
+
+                _logger.LogError(ex, "The meeting deleted failed");
+            }
+            return View();
+        }
+
 
         private async Task<string> SaveProductImage(IFormFile productImageFile, string existingImagePath)
         {
