@@ -65,6 +65,7 @@
 
                     <div class="form-group">
                         <label asp-for="ImageFile" class="control-label">Product image <span class="text-danger">*</span></label>
+                        <div id="imagePreviewContainer"></div>
                         <div class="custom-file">
                             <label class="custom-file-label" asp-for="ImageFile">Choose your file</label>
                             <input style="cursor:pointer" asp-for="ImageFile" class="custom-file-input" id="roomImage">
@@ -82,3 +83,17 @@
         </div>
     </div>
 </div>
+
+<script>
+        document.getElementById('roomImage').addEventListener('change', function (e) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var imagePreview = document.createElement('img');
+            imagePreview.src = event.target.result;
+            imagePreview.style.maxWidth = '200px';
+            document.getElementById('imagePreviewContainer').appendChild(imagePreview);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    });
+
+</script>

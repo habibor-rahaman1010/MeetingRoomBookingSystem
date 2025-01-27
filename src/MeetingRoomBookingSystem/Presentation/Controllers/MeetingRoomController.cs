@@ -37,7 +37,7 @@ namespace Presentation.Controllers
         public async Task<JsonResult> GetMeetingRoomJsonDataAsync([FromBody] MeetingRoomListModel model)
         {
             var result = await _meetingRoomManagementService.GetMeetingRoomsAsync(model.PageIndex, model.PageSize, model.Search,
-                model.FormatSortExpression("Id", "Name", "Description"));
+                model.FormatSortExpression("Id", "Name", "Facilities", "Capacity", "Color", "QRCodeData", "Status"));
 
             var meetingRoomJsonData = new
             {
