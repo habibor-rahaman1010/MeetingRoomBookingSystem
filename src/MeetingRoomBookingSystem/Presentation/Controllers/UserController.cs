@@ -241,15 +241,17 @@ namespace Presentation.Controllers
                     email = user.Email,
                     phoneNumber = user.PhoneNumber,
                     pin = user.Pin,
-                    userRoles = userRoles,       // Current roles
-                    availableRoles = allRoles    // All available roles
+                    designation = user.Designation,
+                    userRoles = userRoles, 
+                    availableRoles = allRoles 
                 }
             });
         }
 
+
         //This is user update mehtod also user roles update code...
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateUser(UserUpdateModel model, List<string> Roles)
+        public async Task<IActionResult> UpdateUser(UserUpdateModel model)
         {
             if (ModelState.IsValid)
             {
@@ -258,15 +260,6 @@ namespace Presentation.Controllers
                 if (user == null)
                 {
                     return Json(new { success = false, message = "User not found." });
-                }
-
-                // Validate the roles to ensure they exist
-                var validRoles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
-                var invalidRoles = Roles.Where(r => !validRoles.Contains(r)).ToList();
-
-                if (invalidRoles.Any())
-                {
-                    return Json(new { success = false, message = $"The following roles do not exist: {string.Join(", ", invalidRoles)}" });
                 }
 
                 // Update user properties
@@ -281,23 +274,6 @@ namespace Presentation.Controllers
                 // Get the current roles of the user
                 var currentRoles = await _userManager.GetRolesAsync(user);
 
-                // Determine roles to remove and add
-                var rolesToRemove = currentRoles.Except(Roles).ToList();
-                var rolesToAdd = Roles.Except(currentRoles).ToList();
-
-                // Remove roles the user no longer has
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
-                if (!removeResult.Succeeded)
-                {
-                    return Json(new { success = false, message = "Failed to remove user roles." });
-                }
-
-                // Add new roles the user is assigned
-                var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
-                if (!addResult.Succeeded)
-                {
-                    return Json(new { success = false, message = "Failed to add new roles." });
-                }
 
                 return Json(new { success = true, message = "User updated successfully." });
             }

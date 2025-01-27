@@ -47,6 +47,8 @@ namespace Presentation.Models
         [Display(Name = "Designation")]
         public string Designation { get; set; } = string.Empty;
 
+        [Required]
+        [Display(Name = "Department")]
         public IList<SelectListItem> Departments { get; private set; }
 
 
