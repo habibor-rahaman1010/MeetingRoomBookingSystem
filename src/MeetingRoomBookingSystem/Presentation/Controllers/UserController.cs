@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataAccess.Identity;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Data;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -35,7 +37,7 @@ namespace Presentation.Controllers
         }
 
         //This method return all users with pagination and with column sorting...
-        [Route("User/AllUserList")]
+        [Route("User/AllUserList"), Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> AllUserList()
         {
             var model = new RegistrationModel();
@@ -44,7 +46,7 @@ namespace Presentation.Controllers
         }
 
         //This method return all users with pagination and with column sorting...
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin, User")]
         [Route("User/GetAllUsers")]
         public async Task<IActionResult> GetAllUsers(int draw, int start, int length, string search, List<Order> order)
         {
@@ -154,14 +156,14 @@ namespace Presentation.Controllers
             return Json(new
             {
                 draw = draw,
-                recordsTotal = _userManager.Users.Count(),  // Total records without filtering
-                recordsFiltered = filteredCount,             // Total records after filtering
+                recordsTotal = _userManager.Users.Count(),
+                recordsFiltered = filteredCount,          
                 data = data
             });
         }
 
         //This is delete user method...
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             try
@@ -220,6 +222,7 @@ namespace Presentation.Controllers
 
 
         //This mehtod get a user by id for update...
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -250,19 +253,19 @@ namespace Presentation.Controllers
 
 
         //This is user update mehtod also user roles update code...
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(UserUpdateModel model)
         {
             if (ModelState.IsValid)
             {
-                // Get the user
+   
                 var user = await _userManager.FindByIdAsync(model.Id.ToString());
                 if (user == null)
                 {
                     return Json(new { success = false, message = "User not found." });
                 }
 
-                // Update user properties
+          
                 user = _mapper.Map(model, user);
 
                 var result = await _userManager.UpdateAsync(user);
@@ -271,7 +274,7 @@ namespace Presentation.Controllers
                     return Json(new { success = false, message = "Failed to update user." });
                 }
 
-                // Get the current roles of the user
+         
                 var currentRoles = await _userManager.GetRolesAsync(user);
 
 

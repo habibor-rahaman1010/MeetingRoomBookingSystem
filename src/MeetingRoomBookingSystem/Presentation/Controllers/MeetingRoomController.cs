@@ -9,6 +9,7 @@ using System.Web;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class MeetingRoomController : Controller
     {
         private readonly IMapper _mapper;
@@ -27,13 +28,14 @@ namespace Presentation.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "Admin, User")]
         public IActionResult Index()
         {
             return View();
         }
 
         [Route("/MeetingRoom/GetMeetingRoomJsonDataAsync")]
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin, User")]
         public async Task<JsonResult> GetMeetingRoomJsonDataAsync([FromBody] MeetingRoomListModel model)
         {
             var result = await _meetingRoomManagementService.GetMeetingRoomsAsync(model.PageIndex, model.PageSize, model.Search,
@@ -63,7 +65,7 @@ namespace Presentation.Controllers
 
 
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public async Task<IActionResult> MeetingRoomAddAsync(MeetingRoomCreateModel model)
         {
             if (!ModelState.IsValid)
@@ -110,6 +112,7 @@ namespace Presentation.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> MeetingRoomByIdAsync(Guid id)
         {
             var meetingRoom = await _meetingRoomManagementService.GetMeetingRoomByIdAsync(id);
@@ -122,7 +125,7 @@ namespace Presentation.Controllers
             return Json(new { success = true, data = meetingRoom });
         }
 
-        [HttpPost, AutoValidateAntiforgeryToken]
+        [HttpPost, AutoValidateAntiforgeryToken, Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMeetingRoom(MeetingRoomUpdateModel model)
         {
             if (ModelState.IsValid)
@@ -157,7 +160,7 @@ namespace Presentation.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public async Task<IActionResult> MeetingRoomDelete(Guid id)
         {
             try
@@ -185,7 +188,7 @@ namespace Presentation.Controllers
             return View();
         }
 
-
+  
         private async Task<string> SaveProductImage(IFormFile productImageFile, string existingImagePath)
         {
             if (productImageFile == null)

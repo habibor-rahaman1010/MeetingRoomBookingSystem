@@ -4,40 +4,49 @@
     ViewData["Title"] = "Log in";
 }
 
+<div class="login-container">
+    <!-- Left Form Side -->
+    <div class="form-side">
+        <div class="login-form text-center">
+            <img src="/images/group.png" alt="Logo" />
+            <h3>Meeting Room Booking System</h3>
+            <h5 class="mb-4">Log in</h5>
 
+            @if (ViewData.ModelState.ContainsKey("InvalidLogin"))
+            {
+                <div class="alert alert-danger">
+                    Invalid PIN or Password. Please try again.
+                </div>
+            }
 
-@{
-    <div class="login-container">
-        <!-- Left Form Side -->
-        <div class="form-side">
-            <div class="login-form text-center">
-                <img src="/images/group.png" alt="Logo" />
-                <h3>Meeting Room Booking System</h3>
-                <h5 class="mb-4">Log in</h5>
-                <form asp-action="Login" method="post">
-                    <div class="form-floating mb-3">
-                        <input asp-for="Pin" class="form-control" placeholder="Enter PIN" />
-                        <label asp-for="Pin">PIN</label>
-                        <span asp-validation-for="Pin" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter Password" />
-                        <label asp-for="Password">Password</label>
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-check mb-3 text-start">
-                        <input asp-for="RememberPassword" class="form-check-input" type="checkbox" />
-                        <label asp-for="RememberPassword" class="form-check-label">Remember Password</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Log in</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Right Image Side -->
-        <div class="image-side">
-            <img src="/images/meetingroom.jpg" alt="Meeting Room" />
+            <form asp-action="Login" method="post">
+                <div class="form-floating mb-3">
+                    <input asp-for="Pin" class="form-control" placeholder="Enter PIN" />
+                    <label asp-for="Pin">PIN</label>
+                    <span asp-validation-for="Pin" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter Password" />
+                    <label asp-for="Password">Password</label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3 text-start">
+                    <input asp-for="RememberPassword" class="form-check-input" type="checkbox" />
+                    <label asp-for="RememberPassword" class="form-check-label">Remember Password</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Log in</button>
+            </form>
         </div>
     </div>
 
+    <!-- Right Image Side -->
+    <div class="image-side">
+        <img src="/images/meetingroom.jpg" alt="Meeting Room" />
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
