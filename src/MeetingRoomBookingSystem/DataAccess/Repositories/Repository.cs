@@ -64,35 +64,6 @@ namespace DataAccess.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-
-        //This mehtod for multi table...
-        /*public virtual async Task<TEntity> GetByIdAsync(TKey id)
-        {
-            var query = _dbSet.AsQueryable();
-
-            var entityType = _dbContext.Model.FindEntityType(typeof(TEntity));
-            var navigations = entityType?.GetNavigations();
-
-            if(navigations != null)
-            {
-                foreach (var navigation in navigations)
-                {
-                    query = query.Include(navigation.Name);
-                }
-            }
-
-            var entity = await query.FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id").Equals(id));
-
-            if (entity == null)
-            {
-                throw new KeyNotFoundException($"Entity of type {typeof(TEntity).Name} with ID {id} not found.");
-            }
-
-            return entity;
-        }*/
-
-
-
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
         {
             IQueryable<TEntity> query = _dbSet;

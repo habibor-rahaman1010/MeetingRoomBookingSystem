@@ -11,6 +11,7 @@ namespace Presentation.AutoMapProfile
         {
             CreateMap<UserUpdateModel, ApplicationUser>().ReverseMap();
             CreateMap<MeetingRoomCreateModel, MeetingRoom>().ReverseMap();
+            CreateMap<MeetingRoomUpdateModel, MeetingRoom>().ReverseMap();
         }
     }
 }

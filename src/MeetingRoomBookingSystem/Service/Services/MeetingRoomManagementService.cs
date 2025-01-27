@@ -1,11 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using Domain.UnitOfWorkContracts;
 using Service.ServicesContract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Services
 {
@@ -23,19 +19,26 @@ namespace Service.Services
             await _meetingRoomUnitOfWork.SaveAsync();
         }
 
-        public Task DeleteMeetingRoomAsync(Guid id)
+        public async Task<(IList<MeetingRoom> data, int total, int totalDisplay)> GetMeetingRoomsAsync(int pageIndex, int pageSize, DataTablesSearch search, string? order)
         {
-            throw new NotImplementedException();
+            return await _meetingRoomUnitOfWork.MeetingRoomRepository.GetPagedMeetingRoomAsync(pageIndex, pageSize, search, order);
         }
 
-        public Task<IList<MeetingRoom>> GetMeetingRoomsAsync()
+        public async Task DeleteMeetingRoomAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _meetingRoomUnitOfWork.MeetingRoomRepository.RemoveAsync(id);
+            await _meetingRoomUnitOfWork.SaveAsync();   
         }
 
-        public Task UpdateMeetingRoomAsync(MeetingRoom meetingRoom)
+        public async Task UpdateMeetingRoomAsync(MeetingRoom meetingRoom)
         {
-            throw new NotImplementedException();
+            await _meetingRoomUnitOfWork.MeetingRoomRepository.EditAsync(meetingRoom);
+            await _meetingRoomUnitOfWork.SaveAsync();
+        }
+
+        public async Task<MeetingRoom> GetMeetingRoomByIdAsync(Guid id)
+        {
+            return await _meetingRoomUnitOfWork.MeetingRoomRepository.GetByIdAsync(id);
         }
     }
 }

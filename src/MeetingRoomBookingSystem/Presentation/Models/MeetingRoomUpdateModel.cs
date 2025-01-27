@@ -2,7 +2,7 @@
 
 namespace Presentation.Models
 {
-    public class MeetingRoomCreateModel
+    public class MeetingRoomUpdateModel
     {
         public Guid Id { get; set; }
 
@@ -26,11 +26,10 @@ namespace Presentation.Models
         [Required(ErrorMessage = "Available Time is required.")]
         public TimeSpan AvailableTime { get; set; }
 
-        [Required(ErrorMessage = "An image file is required.")]
+        [Required(ErrorMessage = "Image file is required.")]
         [DataType(DataType.Upload)]
         public IFormFile? ImageFile { get; set; }
 
         public string ImageUrl { get; set; } = string.Empty;
     }
 }
-

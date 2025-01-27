@@ -16,6 +16,10 @@
 
         public string Color { get; set; } = string.Empty;
 
+        public string QRCodeData { get; set; } = string.Empty;
+
+        public bool Status { get; set; } = false;
+
         public DayOfWeek AvailableDay { get; set; }
 
         public TimeSpan AvailableTime { get; set; }

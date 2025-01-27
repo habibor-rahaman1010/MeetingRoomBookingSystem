@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using DataAccess;
 using Domain.Entities;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Models;
 using Service.ServicesContract;
+using System.Web;
 
 namespace Presentation.Controllers
 {
@@ -28,19 +29,45 @@ namespace Presentation.Controllers
 
         public IActionResult Index()
         {
-            var model = new MeetingRoomCreateModel();
-            return View(model);
+            return View();
         }
+
+        [Route("/MeetingRoom/GetMeetingRoomJsonDataAsync")]
+        [HttpPost]
+        public async Task<JsonResult> GetMeetingRoomJsonDataAsync([FromBody] MeetingRoomListModel model)
+        {
+            var result = await _meetingRoomManagementService.GetMeetingRoomsAsync(model.PageIndex, model.PageSize, model.Search,
+                model.FormatSortExpression("Id", "Name", "Description"));
+
+            var meetingRoomJsonData = new
+            {
+                recordsTotal = result.total,
+                recordsFiltered = result.totalDisplay,
+                data = (from record in result.data
+                        select new string[]
+                        {
+                                $"<img src='{"/" + HttpUtility.HtmlDecode(record.ImageUrl ?? string.Empty)}' alt='Image' width='100' height='70'/>",
+                                HttpUtility.HtmlEncode(record.Name),
+                                HttpUtility.HtmlDecode(record.Facilities),
+                                HttpUtility.HtmlEncode(record.Capacity),
+                                HttpUtility.HtmlEncode(record.Color),
+                                HttpUtility.HtmlEncode(record.QRCodeData),
+                                HttpUtility.HtmlEncode(record.Status),
+                                record.Id.ToString()
+                        }
+                    ).ToArray()
+            };
+
+            return Json(meetingRoomJsonData);
+        }
+
+
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> MeetingRoomAddAsync(MeetingRoomCreateModel model)
         {
             if (!ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    _logger.LogError($"Validation error: {error.ErrorMessage}");
-                }
                 return BadRequest(ModelState);
             }
 
@@ -63,11 +90,11 @@ namespace Presentation.Controllers
 
                 TempData.Put("ResponseMessage", new ResponseModel
                 {
-                    Message = "The product has been created successfuly!",
+                    Message = "The meeting room has been created successfuly!",
                     Type = ResponseTypes.Success
                 });
 
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "MeetingRoom");
 
             }
 
@@ -75,15 +102,64 @@ namespace Presentation.Controllers
             {
                 TempData.Put("ResponseMessage", new ResponseModel
                 {
-                    Message = "The product creation has failed!",
+                    Message = "The meeting room creation has failed!",
                     Type = ResponseTypes.Danger
                 });
-                _logger.LogError(ex, "Ultimatly the product creation failed!");
+                _logger.LogError(ex, "The meeting room create failed!");
             }
             return View(model);
         }
 
-       
+        public async Task<IActionResult> MeetingRoomByIdAsync(Guid id)
+        {
+            var meetingRoom = await _meetingRoomManagementService.GetMeetingRoomByIdAsync(id);
+
+            if (meetingRoom == null)
+            {
+                return Json(new { success = false, message = "Meeting room not found." });
+            }
+
+            return Json(new { success = true, data = meetingRoom });
+        }
+
+        [HttpPost, AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> UpdateMeetingRoom(MeetingRoomUpdateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var mettingRoom = await _meetingRoomManagementService.GetMeetingRoomByIdAsync(model.Id);
+                model.ImageUrl = await SaveProductImage(model.ImageFile, mettingRoom.ImageUrl);
+
+                mettingRoom = _mapper.Map(model, mettingRoom);
+
+                try
+                {
+                    await _meetingRoomManagementService.UpdateMeetingRoomAsync(mettingRoom);
+
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "The metting room has been update successfuly",
+                        Type = ResponseTypes.Success
+                    });
+
+                    return RedirectToAction("Index", "MeetingRoom");
+                }
+                catch (Exception ex)
+                {
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "The meeting room update has failed!",
+                        Type = ResponseTypes.Danger
+                    });
+                    _logger.LogError(ex, "Ultimatly the meeting room update failed!");
+                }
+            }
+            return View(model);
+        }
+
+
+        
+
         private async Task<string> SaveProductImage(IFormFile productImageFile, string existingImagePath)
         {
             if (productImageFile == null)

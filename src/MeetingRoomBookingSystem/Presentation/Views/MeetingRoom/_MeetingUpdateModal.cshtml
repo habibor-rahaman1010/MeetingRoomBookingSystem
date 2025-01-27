@@ -1,0 +1,125 @@
+﻿@model MeetingRoomUpdateModel;
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="modal fade" id="meetingRoomUpdateModal" tabindex="-1" role="dialog" aria-labelledby="meetingRoomUpdateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h5 class="modal-title" id="meetingRoomUpdateLabel">Update Meeting Room</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateMeetingForm" asp-action="UpdateMeetingRoom" asp-controller="MeetingRoom" method="post" enctype="multipart/form-data">
+                    <input asp-for="Id" type="hidden" id="editMeetingId" name="Id" />
+
+                    <div class="form-group">
+                        <label asp-for="Name">Meeting Room Name <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control" placeholder="Meeting Room Name" id="editName" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Facilities">Facilities <span class="text-danger">*</span></label>
+                        <input asp-for="Facilities" class="form-control" placeholder="Facilities" id="editFacilities"/>
+                        <span asp-validation-for="Facilities" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Capacity">Capacity <span class="text-danger">*</span></label>
+                                <input asp-for="Capacity" class="form-control" placeholder="Capacity" id="editCapacity"/>
+                                <span asp-validation-for="Capacity" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label asp-for="Color">Color <span class="text-danger">*</span></label>
+                                    <input asp-for="Color" class="form-control" placeholder="Color" id="editColor" />
+                                    <span asp-validation-for="Color" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AvailableDay" class="control-label"></label>
+                                <select asp-for="AvailableDay" class="form-control" asp-items="Html.GetEnumSelectList<DayOfWeek>()" id="editAvailableDay"></select>
+                                <span asp-validation-for="AvailableDay" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="AvailableTime">Time <span class="text-danger">*</span></label>
+                                <input asp-for="AvailableTime" type="time" class="form-control" placeholder="Time" id="editAvailableTime" />
+                                <span asp-validation-for="AvailableTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add an image tag to display the current image -->
+                    <img id="currentImage" src="" alt="Current Image" style="max-width: 200px; margin-bottom: 10px;" />
+
+                    <div class="form-group">
+                        <label asp-for="ImageFile" class="control-label">Product image <span class="text-danger">*</span></label>
+                        <div class="custom-file">
+                            <label class="custom-file-label" asp-for="ImageFile">Choose your file</label>
+                            <input style="cursor:pointer" asp-for="ImageFile" class="custom-file-input" id="editRoomImage">
+
+                            <p id="imageError"></p>
+                        </div>
+                        <p class="mt-2">Max File size: 5MB <br /> Allowed File: .jpeg, .jpg, .png <br /> Aspect ratio should be 1:1</p>
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary btn-block">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle image preview
+    document.getElementById("editRoomImage").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        const errorElement = document.getElementById("imageError");
+        const imageElement = document.getElementById("currentImage");
+
+        // Clear any previous errors
+        errorElement.textContent = "";
+
+        if (file) {
+            // Validate file type
+            const allowedExtensions = ["image/jpeg", "image/jpg", "image/png"];
+            if (!allowedExtensions.includes(file.type)) {
+                errorElement.textContent = "Invalid file type. Allowed: .jpeg, .jpg, .png";
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            const maxSize = 5 * 1024 * 1024; // 5 MB
+            if (file.size > maxSize) {
+                errorElement.textContent = "File size exceeds 5MB.";
+                return;
+            }
+
+            // Preview the selected image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imageElement.src = e.target.result; // Update the src attribute of the <img> tag
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

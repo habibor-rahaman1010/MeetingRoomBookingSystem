@@ -84,7 +84,7 @@ namespace Presentation
                 }
                 else
                 {
-                    app.UseExceptionHandler("/Home/Error");           
+                    app.UseExceptionHandler("/Home/Error");
                     app.UseHsts();
                 }
 

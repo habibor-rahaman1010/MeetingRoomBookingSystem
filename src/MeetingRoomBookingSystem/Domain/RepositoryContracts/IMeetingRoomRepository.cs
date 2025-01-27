@@ -1,13 +1,9 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.RepositoryContracts
 {
     public interface IMeetingRoomRepository : IRepositoryBase<MeetingRoom, Guid>
     {
+        Task<(IList<MeetingRoom> data, int total, int totalDisplay)> GetPagedMeetingRoomAsync(int pageIndex, int pageSize, DataTablesSearch search, string? order);
     }
 }
