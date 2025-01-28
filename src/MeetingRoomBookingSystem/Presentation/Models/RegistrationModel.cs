@@ -42,7 +42,6 @@ namespace Presentation.Models
         [Display(Name = "Department")]
         public Guid DepartmentId { get; set; }
 
-
         [Required]
         [Display(Name = "Designation")]
         public string Designation { get; set; } = string.Empty;

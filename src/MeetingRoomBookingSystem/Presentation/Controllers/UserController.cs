@@ -222,7 +222,7 @@ namespace Presentation.Controllers
 
 
         //This mehtod get a user by id for update...
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -245,8 +245,8 @@ namespace Presentation.Controllers
                     phoneNumber = user.PhoneNumber,
                     pin = user.Pin,
                     designation = user.Designation,
-                    userRoles = userRoles, 
-                    availableRoles = allRoles 
+                    userRoles = userRoles,
+                    availableRoles = allRoles
                 }
             });
         }

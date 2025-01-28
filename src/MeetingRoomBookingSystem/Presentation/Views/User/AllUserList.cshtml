@@ -271,7 +271,7 @@
 
                         // Populate roles checkboxes
                         var rolesContainer = $('#editRoles');
-                        rolesContainer.empty(); // Clear any previous checkboxes
+                        rolesContainer.empty();
 
                         $.each(response.data.availableRoles, function (index, role) {
                             var isChecked = response.data.userRoles.includes(role) ? 'checked' : '';
@@ -289,9 +289,19 @@
                         alert('Error fetching user data');
                     }
                 },
-                error: function () {
-                    alert('An error occurred while fetching the user data.');
-                }
+                error: function (error) {
+                        if (error.status === 403) {
+                            // Redirect to Access Denied page if the status is 403
+                            window.location.href = '/Account/AccessDenied';
+                        }
+                        else {
+                            $('#toastMessage').text('There was an error deleting the user.');
+                            $('#userToast').toast({
+                                delay: 3000
+                            });
+                            $('#userToast').toast('show');
+                        }
+                    }
             });
         });
 

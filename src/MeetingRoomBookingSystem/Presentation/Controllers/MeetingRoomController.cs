@@ -112,7 +112,7 @@ namespace Presentation.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> MeetingRoomByIdAsync(Guid id)
         {
             var meetingRoom = await _meetingRoomManagementService.GetMeetingRoomByIdAsync(id);

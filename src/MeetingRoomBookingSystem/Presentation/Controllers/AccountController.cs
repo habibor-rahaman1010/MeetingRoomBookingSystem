@@ -49,6 +49,7 @@ namespace Presentation.Controllers
                     PhoneNumber = model.PhoneNumber,
                     UserName = model.Name,
                     Pin = model.Pin,
+                    Designation = model.Designation,
                     DepartmentId = model.DepartmentId
                 };
 
